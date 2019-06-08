@@ -1,0 +1,90 @@
+# gyy
+
+#### 项目介绍
+
+**平台简介**
+基于springboot容器，zokeeper分布式协调服务，dubbo分布式服务框架,redis缓存,elasticsearch搜索引擎，spring jdbctemplate,mybatis持久层框架，mysql数据库等，加入netty+mqtt，swagger2接口文档，WebJars静态资源管理
+
+#### 软件架构
+
+### 项目结构
+
+```
+gyy  
+  ├── db 数据库文件存放目录  
+  ├── gyy-config 配置相关  
+  	├── gyy-api-version-config API版本控制配置  
+	├── gyy-druid-config 数据库连接池    
+	├── gyy-dubbo-consumer-config  dubbo 消费者通用配置   
+	├── gyy-dubbo-provider-config  dubbo 生产者通用配置   
+	├── gyy-swagger-config swagger swagger 接口文档生成配置  
+	├── gyy-webJars-config webJars静态资源配置  
+  ├── gyy-common 工具类  
+  ├── gyy-core 核心类  
+  ├── gyy-manage 管理服务  
+	├──  gyy-dubbo-admin-war dubbo管理平台war包  
+  ├── gyy-plugins 插件包  
+  	├── gyy-elasticsearch-interf ES搜索引擎接口  
+  	├── gyy-elasticsearch-interf ES搜索引擎服务类  
+  	├── gyy-iot-client	物联网客户端  
+  	├── gyy-iot-core   	物联网核心类  
+  	├── gyy-iot-service	物联网服务端  
+  	├── gyy-quartz-plugin 定时任务器（暂未实现）  
+	├── gyy-redis-interf	缓存接口  
+	├── gyy-redis-service   缓存服务类（生产者）  
+  ├── gyy-products 
+  	├── gyy-pay		  支付项目  
+  	  ├── gyy-pay-test 支付测试  
+  	├── gyy-platform 平台项目  
+  	  ├── gyy-consumer-test    消费者测试  
+	  ├── gyy-platform-api     平台API接口  
+	  ├── gyy-platform-interf  平台接口  
+	  ├── gyy-platform-mgr	      平台后台
+	  ├── gyy-platform-plugins 平台插件
+	  ├── gyy-platform-service 平台服务类（生产者）  
+	  ├── gyy-platform-web     平台网页端（消费者）  
+```
+
+### 项目备注
+
+1. 暂未涵盖前端，权限等，具体项目结构后续或许会有所更新变动，仅供参考
+2. 关于dubbo问题请参考 http://dubbo.apache.org/zh-cn/
+3. 关于支付问题请参考 http://www.xxpay.org/dev/api.html#api-tab=tab-api，http://docs.xxpay.org
+
+#### 测试例子
+
+```
+1. 生成者消费者运行测试
+   1.1 运行平台服务端（生产者）项目gyy-platform-service，路径：com.gyy.platform.PlatformServiceProviderApp.java --> Run As
+   1.2 运行平台网页端（消费者）项目gyy-platform-web，路径：com.gyy.platform.PlatformWebConsumerApp.java --> Run As
+   1.3 打开浏览器录入以下路径，即可测试
+   	   http://localhost:9999/test/v1/getDemoList.json
+   	   http://localhost:9999/test/v1/getDemoList2.json
+   1.4 测试API版本控制
+   	      如有v1、v3版本，如v2版本部分缺失，会自动转向v1版本，向下兼容
+   	   http://127.0.0.1:9999/demo/v1/hello  走 @ApiVersion(1) v1
+   	   http://127.0.0.1:9999/demo/v2/hello  走 @ApiVersion(1) v1
+   	   http://127.0.0.1:9999/demo/v3/hello  走 @ApiVersion(3) v3
+   	   http://127.0.0.1:9999/demo/v3/hello  走 @ApiVersion(3) v3
+   1.5 webJars静态资源运行测试
+   	   http://localhost:9001/webjars/jquery/3.1.1/jquery.js
+2. swagger接口文档测试
+   2.1 运行平台API接口（消费者）项目gyy-platform-api，路径：com.gyy.platform.PlatformApiConsumerApp.java --> Run As
+   2.1 打开浏览器录入以下路径，即可测试
+  	   http://localhost:9999/docs.html
+  	   账号密码 admin/123456
+3. netty mqtt运行测试
+	1.1 运行物联网服务器端，项目gyy-iot-service，路径：com.gyy.plugins.iot.ClientApplication.java --> Run As
+		或路径：example.MqttMain.java --> Run As
+	1.2 运行物联网客户端，项目gyy-iot-client，路径：com.gyy.plugins.iot.client.BrokerApplication.java --> Run As
+4. ES搜索引擎运行测试
+	4.1 运行搜索引擎（生产者）项目gyy-elasticsearch-service，
+	        路径：com.gyy.plugins.search.elasticsearch.EsSearchServiceProviderApp.java --> Run As
+	4.2 运行搜索引擎（消费者）项目gyy-consumer-test，
+		路径：com.gyy.DemoServiceConsumerApp.java --> Run As
+	        打开浏览器录入以下路径，即可测试
+	    http://localhost:9001/demo/es/v1/index
+5. 支付测试
+	5.1 运行项目gyy-pay-test，路径：com.gyy.PayTestApp --> Run As
+	4.2 打开浏览器录入http://localhost:8899/
+```
